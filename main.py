@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, url_for
-import pyrebase
+from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
+from auth import login_manager, login, logout
 
 config = {'apiKey': "AIzaSyBOEC9f4jecnYZLVoyXM_KdqZTH22ttLmY",
   'authDomain': "genius-hour-63711.firebaseapp.com",
@@ -10,40 +11,27 @@ config = {'apiKey': "AIzaSyBOEC9f4jecnYZLVoyXM_KdqZTH22ttLmY",
   'appId': "1:122155670178:web:176c93895c0a79d3f455fb",
   'measurementId': "G-6PJM9XVNL8"}
 
-firebase = pyrebase.initialize_app(config)
-auth = firebase.auth()
-
-'''
-email = 'dummy@account.com'
-password = '123456'
-try:
-    auth.sign_in_with_email_and_password(email, password)
-    print("signed in!")
-except:
-    print('Invalid email or password')
-'''
-
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = "your_secret_key_here"
+login_manager.init_app(app)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
         email = request.form["email"]
-        password = request.form["password"]
-        try:
-            auth.sign_in_with_email_and_password(email, password)
-            return redirect(url_for('loggedin'))
-            print('success!')
-        except:
-            print("Not working!")
-
-    return render_template('index.html')
+        password = request.form.get('password')
+        if login(email, password):
+            print("yay")
+        else:
+            return render_template("index.html", error="Invalid email or password")
+    return render_template('index.html', error="nothing to worry about!")
 
 if __name__ == '__main__':
     app.run(debug=True)
 
 
-@app.route('/logged_in')
-def loggedin():
-    return render_template('logged_in.html')
+@app.route("/safe")
+@login_required
+def safe():
+    return "safe!"

@@ -1,13 +1,16 @@
 {% extends "base.html" %}
 {% block title %}Home Page{% endblock %}
 {% block content %}
+<div class="alert alert-primary" role="alert">
+  {{error}}
+</div>
 <h1>
   Login
 </h1>
 <form method="post">
-Email: <input name="email"/>
+  <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" name="email">
 <br/><br/>
-Password: <input name="password"/>
+<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password">
 <br/><br/>
 <button type="submit" class="btn btn-primary">Submit</button>
 </form>
