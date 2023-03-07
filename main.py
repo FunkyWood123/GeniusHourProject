@@ -1,4 +1,4 @@
-#from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, session, url_for
 import pyrebase
 
 config = {'apiKey': "AIzaSyBOEC9f4jecnYZLVoyXM_KdqZTH22ttLmY",
@@ -13,6 +13,7 @@ config = {'apiKey': "AIzaSyBOEC9f4jecnYZLVoyXM_KdqZTH22ttLmY",
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
 
+'''
 email = 'dummy@account.com'
 password = '123456'
 try:
@@ -20,14 +21,29 @@ try:
     print("signed in!")
 except:
     print('Invalid email or password')
-
 '''
+
+
 app = Flask(__name__)
 
-@app.route('/')
+@app.route("/", methods=["GET", "POST"])
 def index():
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+        try:
+            auth.sign_in_with_email_and_password(email, password)
+            return redirect(url_for('loggedin'))
+            print('success!')
+        except:
+            print("Not working!")
+
     return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
-'''
+
+
+@app.route('/logged_in')
+def loggedin():
+    return render_template('logged_in.html')
