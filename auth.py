@@ -42,3 +42,7 @@ def login(email, password):
 # Define a logout function that logs out users with Flask-Login and Firebase
 def logout():
     logout_user()
+
+def signup(email, password):
+    auth = firebase.auth()
+    auth.create_user_with_email_and_password(email, password)
