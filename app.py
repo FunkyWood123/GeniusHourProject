@@ -24,15 +24,15 @@ def index():
         email = request.form["email"]
         password = request.form.get('password')
         if login(email, password):
-            return redirect("/safe")
+            return redirect("/chat")
         else:
             return render_template("index.html", error="Invalid email or password")
     return render_template('index.html', error="nothing to worry about!")
 
 
-@app.route('/safe')
+@app.route('/chat')
 @login_required
-def safe():
+def chat():
     return "nothing to see here!"
 @app.route('/logout')
 @login_required
