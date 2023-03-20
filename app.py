@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, session, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
 from auth import login_manager, login, logout, signup
 import pyrebase
+from flask_socketio import SocketIO, send
+
 
 config = {'apiKey': "AIzaSyBOEC9f4jecnYZLVoyXM_KdqZTH22ttLmY",
   'authDomain': "genius-hour-63711.firebaseapp.com",
@@ -17,6 +19,12 @@ firebase = pyrebase.initialize_app(config)
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "your_secret_key_here"
 login_manager.init_app(app)
+socketio = SocketIO(app, cors_allowed_origins='*')
+
+@socketio.on('message')
+def handleMessage(msg):
+    print('Message ' + msg)
+    send(msg, broadcast=True)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -33,6 +41,7 @@ def index():
 @app.route('/chat')
 @login_required
 def chat():
+    db = firebase.database()
     return render_template('chat.html')
 @app.route('/logout')
 @login_required
@@ -57,4 +66,4 @@ def signuppage():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=6942)
+    socketio.run(app)
