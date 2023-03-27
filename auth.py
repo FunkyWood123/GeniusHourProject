@@ -2,9 +2,9 @@ from flask_login import LoginManager, login_user, logout_user, login_required, U
 import pyrebase
 login_manager = LoginManager()
 
-config = {'apiKey': "AIzaSyBOEC9f4jecnYZLVoyXM_KdqZTH22ttLmY",
-  'authDomain': "genius-hour-63711.firebaseapp.com",
-  'databaseURL' : "https://genius-hour-63711-default-rtdb.europe-west1.firebasedatabase.app",
+config = {'apiKey': "YOUR_API_KEY",
+  'authDomain': "YOUR_AUTH_DOMAIN",
+  'databaseURL' : "DB_URL",
   'projectId': "genius-hour-63711",
   'storageBucket': "genius-hour-63711.appspot.com",
   'messagingSenderId': "122155670178",
